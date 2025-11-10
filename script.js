@@ -1,6 +1,13 @@
 const chatBox = document.getElementById("chat-box");
 const userInput = document.getElementById("user-input");
 
+// Your OpenAI key (exposed, will work immediately, but not secure)
+const OPENAI_API_KEY = "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";
+
+// Use a free CORS proxy
+const CORS_PROXY = "https://corsproxy.io/?";
+const OPENAI_URL = CORS_PROXY + "https://api.openai.com/v1/chat/completions";
+
 function addMessage(msg, className) {
     const msgDiv = document.createElement("div");
     msgDiv.className = "chat-msg " + className;
@@ -34,11 +41,11 @@ async function getChatGPTResponse(message) {
     const typingDiv = showTyping();
 
     try {
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        const response = await fetch(OPENAI_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer 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"
+                "Authorization": `Bearer ${OPENAI_API_KEY}`
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
@@ -68,6 +75,7 @@ function startListening() {
         addMessage("Your browser does not support speech recognition.", "bot-msg");
         return;
     }
+
     const recognition = new webkitSpeechRecognition();
     recognition.lang = "en-US";
     recognition.start();
